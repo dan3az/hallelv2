@@ -24,7 +24,7 @@ export default function Footer() {
               <p className="text-sm mt-4 opacity-80">דניאל מינס – באהבה ובשמחה</p>
             </div>
             
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               <a 
                 href="https://youtube.com" 
                 target="_blank" 
@@ -55,7 +55,7 @@ export default function Footer() {
               >
                 <Phone className="w-5 h-5" />
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
         

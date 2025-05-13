@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const MainHotel = ({ hotel }) => {
+const MainHotel = ({ hotel ,onBookClick}) => {
   if (!hotel) return null;
 
   // מערך מדיה: וידאו ראשון, תמונות אחר כך
@@ -158,7 +158,10 @@ const MainHotel = ({ hotel }) => {
             {hotel.features.includes("parking") && "🅿️ חניה "}
           </p>
           <p className="mb-4">🏖️ נופש כשר ומותאם למשפחות ולציבור הדתי</p>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button 
+          onClick={() => onBookClick(hotel.id)}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            
             לפרטים והזמנה
           </button>
         </div>

@@ -13,6 +13,7 @@ import WhatsAppGroups from "./Components/WhatsAppGroups";
 import AccessibilityWidget from "./Components/AccessibilityWidget";
 
 export default function App() {
+  const [hotels, setHotels] = useState([]);
   const [mainHotel, setMainHotel] = useState(null);
   const [otherHotels, setOtherHotels] = useState([]);
   const [selectedHotel, setSelectedHotel] = useState("");
@@ -28,7 +29,7 @@ useEffect(() => {
   fetchHotels()
     .then((data) => {
       console.log("הנתונים שהתקבלו מהשרת:", data);
-
+      setHotels(data);
       const main = data.find(h => h.isMainEvent);
       const others = data.filter(h => h !== main);
 
@@ -83,10 +84,10 @@ useEffect(() => {
 </div>
 
       {/* הצגת האירוע המרכזי */}
-      <MainHotel hotel={mainHotel} />
+      <MainHotel hotel={mainHotel} onBookClick={handleHotelSelect} />
 
       {/* רשימת שאר המלונות */}
-      <section ref={hotelsRef} id="hotels" className="py-12 md:py-16 bg-blue-50">
+      {otherHotels.length>0&& <section ref={hotelsRef} id="hotels" className="py-12 md:py-16 bg-blue-50">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-8 text-center">
             המלונות שלנו לסופש הקרוב
@@ -101,13 +102,13 @@ useEffect(() => {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
-      <Testimonials />
+      {/* <Testimonials /> */}
       <WhatsAppGroups />
       <ContactForm 
         contactRef={contactRef}
-        hotels={otherHotels}
+        hotels={hotels}
         selectedHotel={selectedHotel}
         onHotelSelect={setSelectedHotel}
       />
