@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ניגודיות גבוהה - מצב כהה */
+.high-contrast {
+  background-color: #000 !important; /* רקע כהה לכל האתר */
+  color: #fff !important; /* טקסט לבן */
+}
+
+/* שינוי הרקע של ה-body */
+html.high-contrast, body.high-contrast {
+  background-color: #000 !important; /* רקע כהה לכל הדף */
+  color: #fff !important; /* טקסט לבן */
+}
+
+/* כותרות */
+.high-contrast h1, .high-contrast h2, .high-contrast h3, .high-contrast h4, .high-contrast h5, .high-contrast h6 {
+  color: #fff !important; /* טקסט לבן לכותרות */
+}
+
+/* קישורים */
+.high-contrast a {
+  color: #80c7ff !important; /* כחול בהיר */
+  text-decoration: underline;
+}
+
+
+
+
+/* טקסט רגיל */
+.high-contrast p, .high-contrast span, .high-contrast div {
+  color: #e0e0e0 !important; /* טקסט אפור בהיר */
+}
+
+/* שדות קלט, טקסטareas וכו' */
+.high-contrast input, .high-contrast textarea, .high-contrast select {
+  background-color: #444 !important; /* רקע כהה לשדות */
+  color: #fff !important; /* טקסט בהיר בשדות */
+  border: 1px solid #777 !important; /* גבול בהיר */
+}
+
+/* שדות קלט בעת סמן */
+.high-contrast input:focus, .high-contrast textarea:focus, .high-contrast select:focus {
+  border-color: #80c7ff !important; /* צבע גבול כחול בהיר בעת סמן */
+  outline: none !important;
+}
+
+/* טקסט שגיאה או הודעות */
+.high-contrast .error {
+  color: #ff4d4d !important; /* טקסט שגיאה אדום */
+}
+
+/* תמונות */
+.high-contrast img {
+  filter: brightness(0.8) contrast(1.2) !important; /* בהירות מופחתת והגברת ניגודיות */
+}
+
+/* תפריטי ניווט */
+.high-contrast nav {
+  background-color: #222 !important; /* רקע כהה לתפריטי ניווט */
+}
+
+.high-contrast .navbar-item {
+  color: #fff !important; /* טקסט בהיר בפריטים בתפריט */
+}
+
+
+.high-contrast .bg-white{
+    background-color: #222 !important;
+}
+.high-contrast .bg-blue-50{
+    background-color: #222 !important;
+}
+.high-contrast .bg-gradient-to-b .from-blue-50 .to-whit{
+    background-color: #222 !important;
+}
+
+.high-contrast label{
+    color: #fff !important;
+}
+
