@@ -17,6 +17,7 @@ export default function App() {
   const [mainHotel, setMainHotel] = useState(null);
   const [otherHotels, setOtherHotels] = useState([]);
   const [selectedHotel, setSelectedHotel] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const contactRef = useRef(null);
   const hotelsRef = useRef(null);
 
@@ -28,16 +29,13 @@ export default function App() {
 useEffect(() => {
   fetchHotels()
     .then((data) => {
-      console.log("הנתונים שהתקבלו מהשרת:", data);
+
       setHotels(data);
       const main = data.find(h => h.isMainEvent);
       const others = data.filter(h => h !== main);
-
-      console.log("אירוע מרכזי:", main);
-      console.log("שאר האירועים:", others);
-
       setMainHotel(main);
       setOtherHotels(others);
+       setIsLoading(false);
     })
     .catch(err => console.error("שגיאה בטעינת המלונות:", err));
 
@@ -84,7 +82,7 @@ useEffect(() => {
 </div>
 
       {/* הצגת האירוע המרכזי */}
-      <MainHotel hotel={mainHotel} onBookClick={handleHotelSelect} />
+      <MainHotel hotel={mainHotel} onBookClick={handleHotelSelect} isLoading={isLoading} />
 
       {/* רשימת שאר המלונות */}
       {otherHotels.length>0&& <section ref={hotelsRef} id="hotels" className="py-12 md:py-16 bg-blue-50">

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';עןא
+// ודא שאתה מייבא את Skeleton אם אתה משתמש בו
+// import Skeleton from "react-loading-skeleton";
 
-const MainHotel = ({ hotel ,onBookClick}) => {
-  if (!hotel) return null;
-
-  // מערך מדיה: וידאו ראשון, תמונות אחר כך
+const MainHotel = ({ hotel, isLoading, onBookClick }) => {
   const hotelMedia = [
     {
       type: "video",
@@ -27,26 +28,24 @@ const MainHotel = ({ hotel ,onBookClick}) => {
     let timer;
 
     if (hotelMedia[activeSlide].type === "video" && !videoLoaded) {
-      // Lazy Load: נחכה שהוידאו ייכנס לתצוגה לפני שנטען אותו
       const videoElement = document.querySelector(`#video-${activeSlide}`);
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && !videoLoaded) {
-            setVideoLoaded(true); // נטען את הסרטון כאשר הוא בתצוגה
-            observer.disconnect();
-          }
-        });
-      }, { threshold: 0.5 });
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !videoLoaded) {
+              setVideoLoaded(true);
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
 
-      if (videoElement) {
-        observer.observe(videoElement);
-      }
-
+      if (videoElement) observer.observe(videoElement);
       return () => observer.disconnect();
     } else if (hotelMedia[activeSlide].type === "image") {
-      // תמונה – נעבור אוטומטית אחרי 6 שניות
       timer = setTimeout(() => {
-        setActiveSlide((prev) => (prev + 1) % hotelMedia.length);
+        setActiveSlide(prev => (prev + 1) % hotelMedia.length);
       }, 6000);
     }
 
@@ -54,13 +53,13 @@ const MainHotel = ({ hotel ,onBookClick}) => {
   }, [activeSlide, videoLoaded]);
 
   const handlePrev = () => {
-    setActiveSlide((prev) => (prev - 1 + hotelMedia.length) % hotelMedia.length);
-    setVideoLoaded(false); // Reset for lazy loading
+    setActiveSlide(prev => (prev - 1 + hotelMedia.length) % hotelMedia.length);
+    setVideoLoaded(false);
   };
 
   const handleNext = () => {
-    setActiveSlide((prev) => (prev + 1) % hotelMedia.length);
-    setVideoLoaded(false); // Reset for lazy loading
+    setActiveSlide(prev => (prev + 1) % hotelMedia.length);
+    setVideoLoaded(false);
   };
 
   const formatDate = (dateStr) => {
@@ -71,18 +70,42 @@ const MainHotel = ({ hotel ,onBookClick}) => {
     });
   };
 
+  // תנאי ראשון – עדיין טוען => הצג שלד
+  if (isLoading) {
+    return (
+      <section className="w-full px-4 py-8">
+        <div className="max-w-screen-xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden p-6">
+          <h2 className="text-3xl font-bold text-blue-900 mb-4 text-center">האירוע המרכזי</h2>
+          <Skeleton height={400} />
+          <div className="mt-6 text-right space-y-2">
+            <Skeleton height={30} width="50%" />
+            <Skeleton height={20} width="30%" />
+            <Skeleton height={20} width="40%" />
+            <Skeleton height={20} width="60%" />
+            <Skeleton height={20} width="35%" />
+            <Skeleton height={40} width="25%" />
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // תנאי שני – לא טוען אבל גם אין מלון תקף
+  if (!hotel || Object.keys(hotel).length === 0) {
+    return null;
+  }
+
+  // תצוגת קומפוננטת המלון
   return (
     <section className="w-full px-4 py-8">
       <div className="max-w-screen-xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
         <h2 className="text-3xl font-bold text-blue-900 mb-4 text-center">האירוע המרכזי</h2>
 
-        {/* קרוסלה עם וידאו ותמונות */}
+        {/* קרוסלה */}
         <div className="relative h-[60vh] lg:h-screen overflow-hidden">
-          {/* שכבות הצללה */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#F8F5F1] via-transparent to-transparent z-10 lg:block hidden"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#F8F5F1] via-transparent to-transparent z-10 lg:hidden block"></div>
 
-          {/* כפתורים */}
           <button
             onClick={handlePrev}
             className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/70 hover:bg-white text-gray-800 rounded-full p-3 z-20 shadow-md"
@@ -99,7 +122,6 @@ const MainHotel = ({ hotel ,onBookClick}) => {
             <FaChevronRight className="w-5 h-5" />
           </button>
 
-          {/* שקפים */}
           {hotelMedia.map((item, index) => (
             <div
               key={index}
@@ -127,7 +149,6 @@ const MainHotel = ({ hotel ,onBookClick}) => {
             </div>
           ))}
 
-          {/* נקודות ניווט */}
           <div className="absolute bottom-6 right-6 z-20 flex gap-2">
             {hotelMedia.map((_, index) => (
               <button
@@ -158,10 +179,10 @@ const MainHotel = ({ hotel ,onBookClick}) => {
             {hotel.features.includes("parking") && "🅿️ חניה "}
           </p>
           <p className="mb-4">🏖️ נופש כשר ומותאם למשפחות ולציבור הדתי</p>
-          <button 
-          onClick={() => onBookClick(hotel.id)}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            
+          <button
+            onClick={() => onBookClick(hotel.id)}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
             לפרטים והזמנה
           </button>
         </div>
