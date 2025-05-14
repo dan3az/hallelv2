@@ -25,32 +25,20 @@ const MainHotel = ({ hotel, isLoading, onBookClick }) => {
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
-    let timer;
+  let timer;
 
-    if (hotelMedia[activeSlide].type === "video" && !videoLoaded) {
-      const videoElement = document.querySelector(`#video-${activeSlide}`);
-      const observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && !videoLoaded) {
-              setVideoLoaded(true);
-              observer.disconnect();
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
+  if (hotelMedia[activeSlide].type === "video") {
+    // פשוט טען את הוידאו - לא צריך observer
+    setVideoLoaded(true);
+  } else {
+    // עבור תמונות - העבר אוטומטית לשקופית הבאה
+    timer = setTimeout(() => {
+      setActiveSlide(prev => (prev + 1) % hotelMedia.length);
+    }, 6000);
+  }
 
-      if (videoElement) observer.observe(videoElement);
-      return () => observer.disconnect();
-    } else if (hotelMedia[activeSlide].type === "image") {
-      timer = setTimeout(() => {
-        setActiveSlide(prev => (prev + 1) % hotelMedia.length);
-      }, 6000);
-    }
-
-    return () => clearTimeout(timer);
-  }, [activeSlide, videoLoaded]);
+  return () => clearTimeout(timer);
+}, [activeSlide]);
 
   const handlePrev = () => {
     setActiveSlide(prev => (prev - 1 + hotelMedia.length) % hotelMedia.length);
@@ -131,14 +119,14 @@ const MainHotel = ({ hotel, isLoading, onBookClick }) => {
             >
               {item.type === "video" ? (
                 <video
-                  id={`video-${index}`}
-                  src={videoLoaded ? item.src : ""}
-                  className="w-full h-full object-cover"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
+  id={`video-${index}`}
+  src={item.src}
+  className="w-full h-full object-cover"
+  autoPlay
+  muted
+  loop
+  playsInline
+/>
               ) : (
                 <img
                   src={item.src}
