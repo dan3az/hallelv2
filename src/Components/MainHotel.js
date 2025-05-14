@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';עןא
+import 'react-loading-skeleton/dist/skeleton.css';
 // ודא שאתה מייבא את Skeleton אם אתה משתמש בו
 // import Skeleton from "react-loading-skeleton";
 
