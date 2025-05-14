@@ -7,22 +7,23 @@ export default function ContactForm({ contactRef, hotels, selectedHotel, onHotel
     phone: "",
     email: "",
     hotel: "",
+    message: "", // שדה חדש
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-useEffect(() => {
-  if (selectedHotel) {
-    const selected = hotels.find((hotel) => hotel.id === selectedHotel);
-    if (selected) {
-      setFormData((prev) => ({
-        ...prev,
-        hotel: selected,
-      }));
+  useEffect(() => {
+    if (selectedHotel) {
+      const selected = hotels.find((hotel) => hotel.id === selectedHotel);
+      if (selected) {
+        setFormData((prev) => ({
+          ...prev,
+          hotel: selected,
+        }));
+      }
     }
-  }
-}, [selectedHotel, hotels]);
+  }, [selectedHotel, hotels]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,50 +32,51 @@ useEffect(() => {
       [name]: value,
     }));
   };
-const handleHotelChange = (hotelId) => {
-  const selected = hotels.find((hotel) => hotel.id === hotelId);
-  setFormData((prev) => ({
-    ...prev,
-    hotel: selected || "",
-  }));
-  onHotelSelect(hotelId);
-};
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-
-  const payload = {
-    ...formData,
-    hotel: formData.hotel || null, // אובייקט מלא
+  const handleHotelChange = (hotelId) => {
+    const selected = hotels.find((hotel) => hotel.id === hotelId);
+    setFormData((prev) => ({
+      ...prev,
+      hotel: selected || "",
+    }));
+    onHotelSelect(hotelId);
   };
 
-  try {
-    const response = await fetch('https://hook.eu2.make.com/3sncfmuct8l6mlw6zcej3f4yxpr2qdln', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    const payload = {
+      ...formData,
+      hotel: formData.hotel || null,
+    };
+
+    try {
+      const response = await fetch('https://hook.eu2.make.com/3sncfmuct8l6mlw6zcej3f4yxpr2qdln', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      setIsSubmitted(true);
+      setFormData({ name: "", phone: "", email: "", hotel: "", message: "" });
+      onHotelSelect("");
+
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 3000);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitted(true);
-    setFormData({ name: "", phone: "", email: "", hotel: "" });
-    onHotelSelect("");
-
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 3000);
-  } catch (error) {
-    console.error('Error submitting form:', error);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
     <section ref={contactRef} id="contact" className="py-12 md:py-16 bg-gradient-to-b from-blue-50 to-white">
@@ -150,16 +152,31 @@ const handleHotelChange = (hotelId) => {
                     <Building className="w-4 h-4" />
                     באיזה מלון אתם מעוניינים?
                   </label>
-                 <select
-  value={formData.hotel?.id || ""}
-  onChange={(e) => handleHotelChange(e.target.value)}
-  className="w-full p-3 border border-blue-100 rounded-lg focus:ring-2 focus:ring-blue-500"
->
-  <option value="">בחרו מלון</option>
-  {hotels.map((hotel) => (
-    <option key={hotel.id} value={hotel.id}>{hotel.title}</option>
-  ))}
-</select>
+                  <select
+                    value={formData.hotel?.id || ""}
+                    onChange={(e) => handleHotelChange(e.target.value)}
+                    className="w-full p-3 border border-blue-100 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">בחרו מלון</option>
+                    {hotels.map((hotel) => (
+                      <option key={hotel.id} value={hotel.id}>{hotel.title}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col space-y-2 md:col-span-2">
+                  <label htmlFor="message" className="text-blue-900 font-medium flex items-center gap-2">
+                    תוכן הפניה
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="כתבו כאן כל שאלה, בקשה או מידע שתרצו שנדע מראש"
+                    rows="4"
+                    className="w-full p-3 border border-blue-100 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                  />
                 </div>
 
                 <button

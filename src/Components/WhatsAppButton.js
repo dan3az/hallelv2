@@ -8,7 +8,7 @@ export default function WhatsAppButton({ selectedHotel, hotels }) {
       '';
     const message = `היי 🌞 אשמח לקבל מידע על החופשה במלון ${hotelName} 🏨 תודה!`;
     const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/972508133163?text=${encodedMessage}`, '_blank');
+    window.open(`https://wa.me/972547260002?text=${encodedMessage}`, '_blank');
   };
 
   return (
