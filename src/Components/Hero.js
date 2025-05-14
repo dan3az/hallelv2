@@ -1,5 +1,6 @@
 import React from "react";
 /*import { Button } from "@/components/ui/button";*/
+import mainimg from "../img/1.jpg"
 import logo from '../img/logo.PNG';
 import { Calendar, Book, ChevronLeft } from "lucide-react";
 import '../index.css';
@@ -9,9 +10,9 @@ export default function Hero({ scrollToContact, scrollToHotels }) {
       <div className="absolute top-4 right-4 text-white text-sm z-30 font-medium">
   בס״ד
 </div>
-      <div className="absolute inset-0 bg-black/40 z-10"></div>
+      <div className="absolute inset-0 bg-black/20 z-10"></div>
       <img 
-        src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+        src={mainimg}
         alt="נופש" 
         className="absolute w-full h-full object-cover object-center"
       />
