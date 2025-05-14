@@ -118,10 +118,10 @@ const MainHotel = ({ hotel, isLoading, onBookClick }) => {
               }`}
             >
               {item.type === "video" ? (
-<video
+ <video
   id={`video-${index}`}
   src={item.src}
-  className="w-full sm:w-[80%] h-full object-contain scale-[0.9] sm:scale-100 mx-auto"
+  className="w-full h-full object-cover sm:object-cover object-contain"
   autoPlay
   muted
   loop
